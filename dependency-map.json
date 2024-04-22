@@ -1,6 +1,6 @@
 {
   "name": "jsapi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The Jsapi class is a JavaScript/TypeScript class designed to simplify the usage of the Fetch API for HTTP requests.",
   "homepage": "https://github.com/philiphoney/jsapi",
   "author": "philip",

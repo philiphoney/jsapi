@@ -1,34 +1,47 @@
 # Jsapi
 
-The `Jsapi` class is a JavaScript/TypeScript class designed to simplify the usage of the Fetch API for HTTP requests. Here's an explanation of its key components and functionalities:
+The `Jsapi` class serves as an interface for communicating with an API. It provides methods for fetching data (`getData`), sending HTTP requests (`fetchData`), and appending optional parameters (`attach`). These methods utilize the Fetch API to send HTTP requests to the specified API URL and process the responses.
 
-1. **Constructor**: When creating an instance of the `Jsapi` class, the API URL must be passed as a parameter. This sets the base URL to be used for all requests.
+#### Constructor
 
-2. **getData() Method**: This method executes an HTTP GET request to the specified API URL. It utilizes the `fetch` function to retrieve data from the API. The received data is then interpreted as JSON and returned. If an error occurs, an error message is logged to the console.
+The constructor of the `Jsapi` class creates a new instance of the class with a specified API URL and optional request headers. By default, the header `'Content-Type': 'application/json'` is used.
 
-3. **attach(params, type) Method**: This method allows optional parameters to be appended to the API URL. The parameters are passed as an object, where the key represents the parameter name and the value represents its value. The method also accepts an optional second parameter `type`, which can be either empty or `"simpler"`. When `"simpler"` is specified, a simplified request is made, where the parameters are directly appended to the URL. Otherwise, the URL with the parameters is returned as a string.
+#### `getData` Method
 
-4. **Functionality**: When calling the `getData()` method, a simple GET request is sent to the API URL, and the received data is returned. When using the `attach()` method, the optional parameters are appended to the API URL, and depending on the `type` parameter, either a standard or simplified request is made. The method returns either the modified URL or the received data.
+The `getData` method retrieves data from the API by sending a GET request to the API URL. It expects the response to be in JSON format and returns the parsed data. It handles errors that occur during the fetch operation.
 
-The `Jsapi` class thus enables easy and flexible usage of the Fetch API for HTTP requests in JavaScript/TypeScript by simplifying common operations such as fetching data and appending parameters.
+#### `fetchData` Method
 
-example:
+The `fetchData` method sends an HTTP request to the API with specified parameters (URL, method, data). It supports various HTTP methods (GET, POST, PUT, PATCH, DELETE) and expects JSON responses. It can optionally send data in the request body. This method also handles errors that occur during the fetch operation.
+
+#### `attach` Method
+
+The `attach` method appends optional parameters to the URL and retrieves data from the API. It uses the `fetchData` method to send the request to the constructed URL. This method also handles errors that occur during the fetch operation.
+
+#### Example Usage
+
 ```ts
-function main() {
-    // Create an instance of the Jsapi class with the API URL
-    var apiUrl = "https://jsonplaceholder.typicode.com/comments";
-    var jsapi = new Jsapi(apiUrl);
-    // Fetch data from the API and log it in the console
-    jsapi.getData()
-        .then(function (responseData) { return console.log(responseData); });
-    // Add optional parameters and fetch data with appended parameters
-    var optionalParams = {
-        postId: "2"
-    };
-    jsapi.attach(optionalParams)
-        .then(function (responseWithParams) { return console.log(responseWithParams); });
-    // Use the "simpler" method for a simplified request
-    jsapi.attach(optionalParams, "simpler")
-        .then(function (simplerResponse) { return console.log(simplerResponse); });
-}
+const jsapi = new Jsapi('https://example.com/api');
+
+// Example: Fetch data from the API
+jsapi.getData()
+    .then(responseData => console.log(responseData))
+    .catch(error => console.error('Error fetching data:', error));
+
+// Example: Send a PUT request with data
+const data = {
+    id: 1,
+    title: 'foo',
+    body: 'bar',
+    userId: 1
+};
+jsapi.fetchData('PUT', data)
+    .then(responseWithParams => console.log(responseWithParams))
+
+// Example: Attach optional parameters and fetch data
+const optionalParams = {
+    page: 'path'
+};
+jsapi.attach(optionalParams, 'GET')
+    .then(responseWithParams => console.log(responseWithParams))
 ```
